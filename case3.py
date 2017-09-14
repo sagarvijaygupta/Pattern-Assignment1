@@ -6,6 +6,7 @@ from mat_fun import *
 from decision_surface import *
 from info_classes import *
 from read_data import *
+from analysis import *
 
 if __name__ == '__main__':
 	classes = ['Class1.txt', 'Class2.txt', 'Class3.txt']
@@ -28,13 +29,19 @@ if __name__ == '__main__':
 	covs[1][1][0] = 0
 	covs[2][0][1] = 0
 	covs[2][1][0] = 0
+	# print(covs)
 	w, w0, W = pocs(means12, [covs[0], covs[1]], pw12)
+	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[0], test_data[1]], w, w0, gx, W)
 	decision_boundary(w, w0, [training_data[0], training_data[1]], gx, W)
-	w, w0, W = pocs(means23, [covs[1], covs[2]], pw23)
-	decision_boundary(w, w0, [training_data[1], training_data[2]], gx, W)
-	w, w0, W = pocs(means31, [covs[0], covs[2]], pw31)
-	decision_boundary(w, w0, [training_data[2], training_data[0]], gx, W)
-	w, w0, W = pocs(means123, covs, pw123)
-	decision_boundary(w, w0, training_data, gx, W)
 
+	w, w0, W = pocs(means23, [covs[1], covs[2]], pw23)
+	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[1], test_data[2]], w, w0, gx, W)
+	decision_boundary(w, w0, [training_data[1], training_data[2]], gx, W)
 	
+	w, w0, W = pocs(means31, [covs[0], covs[2]], pw31)
+	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[2], test_data[0]], w, w0, gx, W)
+	decision_boundary(w, w0, [training_data[2], training_data[0]], gx, W)
+
+	w, w0, W = pocs(means123, covs, pw123)
+	confusion, accuracy, precision, recall, fmeasure = analysis(test_data, w, w0, gx, W)
+	decision_boundary(w, w0, training_data, gx, W)
