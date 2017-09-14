@@ -7,6 +7,7 @@ from decision_surface import *
 from info_classes import *
 from read_data import *
 from analysis import *
+from contour import *
 
 if __name__ == '__main__':
 	classes = ['Class1.txt', 'Class2.txt', 'Class3.txt']
@@ -36,18 +37,25 @@ if __name__ == '__main__':
 
 	w, w0 = pocs(means12, meanCovs12, pw12)
 	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[0], test_data[1]], w, w0, gx, None)
-	decision_boundary(w, w0, [training_data[0], training_data[1]], gx)
+	decision_boundary(w, w0, [training_data[0], training_data[1]], gx, "Linear data", ["class1", "class2"])
+	print(confusion,"\n", accuracy,"\n", precision,"\n", recall,"\n", fmeasure)
+	contour(w, w0, [training_data[0], training_data[1]], gx, "Linear data", ["class1", "class2"])
 	
 	w, w0 = pocs(means23, meanCovs23, pw23)
 	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[1], test_data[2]], w, w0, gx, None)
-	decision_boundary(w, w0, [training_data[1], training_data[2]], gx)
-	
+	decision_boundary(w, w0, [training_data[1], training_data[2]], gx, "Linear data", ["class2", "class3"])
+	print(confusion,"\n", accuracy,"\n", precision,"\n", recall,"\n", fmeasure)
+	contour(w, w0, [training_data[1], training_data[2]], gx, "Linear data", ["class2", "class3"])
+
 	w, w0 = pocs(means31, meanCovs31, pw31)
 	confusion, accuracy, precision, recall, fmeasure = analysis([test_data[2], test_data[0]], w, w0, gx, None)
-	decision_boundary(w, w0, [training_data[2], training_data[0]], gx)
-	
+	decision_boundary(w, w0, [training_data[2], training_data[0]], gx, "Linear data", ["class3", "class1"])
+	print(confusion,"\n", accuracy,"\n", precision,"\n", recall,"\n", fmeasure)
+	contour(w, w0, [training_data[2], training_data[0]], gx, "Linear data", ["class3", "class1"])
+
 	w, w0 = pocs(means123, meanCovs123, pw123)
 	confusion, accuracy, precision, recall, fmeasure = analysis(test_data, w, w0, gx, None)
-	decision_boundary(w, w0, training_data, gx)
-	
+	decision_boundary(w, w0, training_data, gx, "Linear data", ["class1", "class2", "class3"])
+	print(confusion,"\n", accuracy,"\n", precision,"\n", recall,"\n", fmeasure)
+	contour(w, w0, training_data, gx, "Linear data", ["class1", "class2", "class3"])
 

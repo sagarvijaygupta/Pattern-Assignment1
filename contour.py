@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math 
 
-def decision_boundary(w, w0, dataset, gx, dataSource, classes, W = None):
+def contour(w, w0, dataset, gx, dataSource, classes, W = None):
 	dataPlot = {}
 
 	plt.xlabel('X')
@@ -38,13 +38,17 @@ def decision_boundary(w, w0, dataset, gx, dataSource, classes, W = None):
 
 	epsilon =  (max_x - min_x)/300
 
-	xValues = [[] for x in range(len(dataset))]
-	yValues = [[] for x in range(len(dataset))]
+	xValues = []
+	yValues = []
+	zValues = [[] for x in range(1+int((max_y-min_y)/epsilon))]
+	print(len(zValues))
 	i = min_x
 	j = min_y
-	while i < max_x:
-		j = min_y
-		while j < max_y:
+	count = 0
+	while j < max_y:
+		yValues.append(j)
+		i = min_x
+		while i < max_x:
 			min_gx = -1*math.inf
 			min_idx = 0
 			for x in range(len(dataset)):
@@ -55,15 +59,20 @@ def decision_boundary(w, w0, dataset, gx, dataSource, classes, W = None):
 				if W==None and gx(w[x], w0[x], [[i, j]], W) > min_gx:
 					min_idx = x
 					min_gx = gx(w[x], w0[x], [[i, j]], W)
-			xValues[min_idx].append(i)
-			yValues[min_idx].append(j)
-			j += epsilon
-		i += epsilon
+
+			if j == min_y:
+				xValues.append(i)
+			zValues[count].append(min_gx)
+			i += epsilon
+		j += epsilon
+		count += 1
+
 	colors_dot = ['#1A4F63', '#068587', '#6FB07F', '#FCB03C', '#FC5B3F']
 	colors_triangle = ['#69ADFA', '#FFADA6', '#FF4A3A', '#CCED10', '#59660E']
-	for x in range(len(dataset)):	
-		plt.scatter(xValues[x], yValues[x], color = colors_dot[x], marker = 'o')
-		legends.append(mpatches.Patch(color = colors_dot[x], label = classes[x] + ' prediction'))
+
+	cp = plt.contour(xValues, yValues, zValues)
+	plt.clabel(cp, inline=True, 
+	          fontsize=10)
 
 	for x in range(len(dataset)):	
 		plt.scatter(dataPlot[x][0], dataPlot[x][1], color = colors_triangle[x], marker = '.')

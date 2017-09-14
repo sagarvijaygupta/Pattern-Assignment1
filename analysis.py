@@ -2,7 +2,6 @@ import math
 
 def analysis(test_data, w, w0, gx, W):
 	right = 0
-
 	classCount = 0
 	total = 0
 	confusion = [[0 for x in test_data] for y in test_data]
@@ -24,18 +23,22 @@ def analysis(test_data, w, w0, gx, W):
 
 			confusion[classCount][min_idx] += 1
 		classCount += 1
-s
+
 	precision = []
 	recall = []
 	fmeasure = []
-
 	for i in range(len(test_data)):
 		right += confusion[i][i]
 		precision.append(confusion[i][i]/sum(confusion[i]))
-		recall.append(confusion[i][i]/(sum(x[i] for x in confusion)))
+		div = sum(x[i] for x in confusion)
+		if div != 0:
+			recall.append(confusion[i][i]/div)
+		else:
+			recall.append(math.inf)
 
 	for i in range(len(test_data)):
-		fmeasure.append(2*precision[i]*recall[i]/(precision[i] + recall[i]))
+		if precision[i] + recall[i] != 0:
+			fmeasure.append(2*precision[i]*recall[i]/(precision[i] + recall[i]))
 
 	accuracy = right / total
 
