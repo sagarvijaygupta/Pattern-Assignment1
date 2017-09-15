@@ -2,9 +2,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math 
 
-def decision_boundary(w, w0, dataset, gx, dataSource, classes, W = None):
+def decision_boundary(w, w0, dataset, gx, args, classes, W = None):
 	dataPlot = {}
-
+	case = args[0][:-3]
+	dataSource = args[1][:-1]
 	plt.xlabel('X')
 	plt.ylabel('Y')
 	title = dataSource + '\n'
@@ -69,4 +70,8 @@ def decision_boundary(w, w0, dataset, gx, dataSource, classes, W = None):
 		plt.scatter(dataPlot[x][0], dataPlot[x][1], color = colors_triangle[x], marker = '.')
 		legends.append(mpatches.Patch(color = colors_triangle[x], label = classes[x] + ' data'))
 	plt.legend(handles = legends).get_frame().set_alpha(0.5)
+	str = ""
+	for i in range(len(classes)):
+		str += classes[i][-1]
+	plt.savefig("Plots/" + case + "/" + dataSource + "/" + case + dataSource + str)
 	plt.show()

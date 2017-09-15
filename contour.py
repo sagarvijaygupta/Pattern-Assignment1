@@ -2,9 +2,12 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math 
 
-def contour(w, w0, dataset, gx, dataSource, classes, W = None):
+def contour(w, w0, dataset, gx, args, classes, W = None):
 	dataPlot = {}
-
+	
+	case = args[0][:-3]
+	dataSource = args[1][:-1]
+	
 	plt.xlabel('X')
 	plt.ylabel('Y')
 	title = dataSource + '\n'
@@ -70,7 +73,7 @@ def contour(w, w0, dataset, gx, dataSource, classes, W = None):
 	colors_dot = ['#1A4F63', '#068587', '#6FB07F', '#FCB03C', '#FC5B3F']
 	colors_triangle = ['#69ADFA', '#FFADA6', '#FF4A3A', '#CCED10', '#59660E']
 
-	cp = plt.contour(xValues, yValues, zValues)
+	cp = plt.contour(xValues, yValues, zValues, colors = 'k')
 	plt.clabel(cp, inline=True, 
 	          fontsize=10)
 
@@ -78,4 +81,8 @@ def contour(w, w0, dataset, gx, dataSource, classes, W = None):
 		plt.scatter(dataPlot[x][0], dataPlot[x][1], color = colors_triangle[x], marker = '.')
 		legends.append(mpatches.Patch(color = colors_triangle[x], label = classes[x] + ' data'))
 	plt.legend(handles = legends).get_frame().set_alpha(0.5)
+	str = ""
+	for i in range(len(classes)):
+		str += classes[i][-1]
+	plt.savefig("Plots/" + case + "/" + dataSource + "/" + case + dataSource + "Contour" + str)
 	plt.show()
