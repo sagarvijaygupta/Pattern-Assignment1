@@ -46,16 +46,16 @@ def decision_boundary(w, w0, dataset, gx, args, classes, W = None):
 	while i < max_x:
 		j = min_y
 		while j < max_y:
-			min_gx = -1*math.inf
+			max_gx = -1*math.inf
 			min_idx = 0
 			for x in range(len(dataset)):
-				if W != None and gx(w[x], w0[x], [[i, j]], W[x]) > min_gx:
+				if W != None and gx(w[x], w0[x], [[i, j]], W[x]) > max_gx:
 					min_idx = x
-					min_gx = gx(w[x], w0[x], [[i, j]], W[x])
+					max_gx = gx(w[x], w0[x], [[i, j]], W[x])
 
-				if W==None and gx(w[x], w0[x], [[i, j]], W) > min_gx:
+				if W==None and gx(w[x], w0[x], [[i, j]], W) > max_gx:
 					min_idx = x
-					min_gx = gx(w[x], w0[x], [[i, j]], W)
+					max_gx = gx(w[x], w0[x], [[i, j]], W)
 			xValues[min_idx].append(i)
 			yValues[min_idx].append(j)
 			j += epsilon

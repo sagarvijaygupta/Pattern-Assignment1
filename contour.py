@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math 
+import numpy as np
 
-def contour(w, w0, dataset, gx, args, classes, W = None):
+def contour(w, w0, dataset, Norm, args, classes, mu, sigma, d, W = None):
 	dataPlot = {}
 	
 	case = args[0][:-3]
@@ -52,27 +53,27 @@ def contour(w, w0, dataset, gx, args, classes, W = None):
 		yValues.append(j)
 		i = min_x
 		while i < max_x:
-			min_gx = -1*math.inf
+			max_Norm = -1*math.inf
 			min_idx = 0
 			for x in range(len(dataset)):
-				if W != None and gx(w[x], w0[x], [[i, j]], W[x]) > min_gx:
+				if W != None and Norm(np.array([[i, j]]), mu[x], sigma, d)[0][0] > max_Norm:
 					min_idx = x
-					min_gx = gx(w[x], w0[x], [[i, j]], W[x])
+					max_Norm = Norm(np.array([[i, j]]), mu[x], sigma, d)[0][0]
 
-				if W==None and gx(w[x], w0[x], [[i, j]], W) > min_gx:
+				if W==None and Norm(np.array([[i, j]]), mu[x], sigma, d)[0][0] > max_Norm:
 					min_idx = x
-					min_gx = gx(w[x], w0[x], [[i, j]], W)
+					max_Norm = Norm(np.array([[i, j]]), mu[x], sigma, d)[0][0]
 
 			if j == min_y:
 				xValues.append(i)
-			zValues[count].append(min_gx)
+			zValues[count].append(max_Norm)
 			i += epsilon
 		j += epsilon
 		count += 1
 
 	colors_dot = ['#1A4F63', '#068587', '#6FB07F', '#FCB03C', '#FC5B3F']
 	colors_triangle = ['#69ADFA', '#FFADA6', '#FF4A3A', '#CCED10', '#59660E']
-
+	# print(zValues)
 	cp = plt.contour(xValues, yValues, zValues, colors = 'k')
 	plt.clabel(cp, inline=True, 
 	          fontsize=10)
